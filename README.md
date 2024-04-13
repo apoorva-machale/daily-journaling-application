@@ -2,6 +2,9 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Installations
+react-router-dom
+Material-UI - @mui/material, @mui/icons-material, @emotion/styled, @emotion/react
 ## Available Scripts
 
 In the project directory, you can run:

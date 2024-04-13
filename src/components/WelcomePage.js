@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 // import Divider from '@mui/material/Divider';
 // import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from './AppAppBar';
-// import Hero from './components/Hero';
+import Main from './Main';
 // import LogoCollection from './components/LogoCollection';
 // import Highlights from './components/Highlights';
 // import Features from './components/Features';
@@ -24,8 +24,8 @@ export default function WelcomePage() {
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode}/>
       {/* <Hero /> */}
       <Box sx={{ bgcolor: 'background.default' }}>
-        {/* <LogoCollection />
-        <Features />
+        <Main />
+        {/*<Features />
         <Divider />
         <Testimonials />
         <Divider />

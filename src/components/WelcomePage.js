@@ -2,16 +2,15 @@ import * as React from 'react';
 // import PropTypes from 'prop-types';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-// import Divider from '@mui/material/Divider';
+import Divider from '@mui/material/Divider';
 // import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from './AppAppBar';
 import Main from './Main';
-// import LogoCollection from './components/LogoCollection';
-// import Highlights from './components/Highlights';
-// import Features from './components/Features';
-// import Testimonials from './components/Testimonials';
-// import FAQ from './components/FAQ';
-// import Footer from './components/Footer';
+import Highlights from './Highlights';
+import Features from './Features';
+import Testimonials from './Testimonials';
+import FAQ from './FAQ';
+import Footer from './Footer';
 
 export default function WelcomePage() {
     const [mode, setMode] = React.useState('light');
@@ -25,7 +24,7 @@ export default function WelcomePage() {
       {/* <Hero /> */}
       <Box sx={{ bgcolor: 'background.default' }}>
         <Main />
-        {/*<Features />
+        <Features />
         <Divider />
         <Testimonials />
         <Divider />
@@ -33,7 +32,7 @@ export default function WelcomePage() {
         <Divider />
         <FAQ />
         <Divider />
-        <Footer /> */}
+        <Footer />
       </Box>
     </div>
   );

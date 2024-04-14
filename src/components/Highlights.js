@@ -11,6 +11,8 @@ import QueryStatsRoundedIcon from '@mui/icons-material/QueryStatsRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
 import SupportAgentRoundedIcon from '@mui/icons-material/SupportAgentRounded';
 import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
+import Carousel from 'react-material-ui-carousel'
+
 
 const items = [
   {
@@ -58,8 +60,8 @@ export default function Highlights() {
       sx={{
         pt: { xs: 4, sm: 12 },
         pb: { xs: 8, sm: 16 },
-        color: 'white',
-        bgcolor: '#06090a',
+        color: 'black',
+        backgroundColor: '#01579b',
       }}
     >
       <Container
@@ -73,7 +75,7 @@ export default function Highlights() {
       >
         <Box
           sx={{
-            width: { sm: '100%', md: '60%' },
+            width: { sm: '100%', md: '100%' },
             textAlign: { sm: 'left', md: 'center' },
           }}
         >
@@ -86,25 +88,16 @@ export default function Highlights() {
             precision in every detail.
           </Typography>
         </Box>
-        <Grid container spacing={2.5}>
+        <Box
+          sx={{
+            width: { sm: '100%', md: '100%' },
+            textAlign: { sm: 'left', md: 'center' },
+          }}
+        >
+        <Carousel>
           {items.map((item, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Stack
-                direction="column"
-                color="inherit"
-                component={Card}
-                spacing={1}
-                useFlexGap
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  border: '1px solid',
-                  borderColor: 'grey.800',
-                  background: 'transparent',
-                  backgroundColor: 'grey.900',
-                }}
-              >
-                <Box sx={{ opacity: '50%' }}>{item.icon}</Box>
+            <Grid item key={index}>
+                <Box sx={{ opacity: '30%' }}>{item.icon}</Box>
                 <div>
                   <Typography fontWeight="medium" gutterBottom>
                     {item.title}
@@ -113,10 +106,10 @@ export default function Highlights() {
                     {item.description}
                   </Typography>
                 </div>
-              </Stack>
             </Grid>
           ))}
-        </Grid>
+         </Carousel>
+         </Box>
       </Container>
     </Box>
   );

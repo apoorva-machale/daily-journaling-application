@@ -18,8 +18,7 @@ const logoStyle = {
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" mt={1}>
-      {'Copyright © Apoorva'}&nbsp;
-      {new Date().getFullYear()}
+      {'Copyright ©'}{new Date().getFullYear()}{' by Apoorva Machale'}&nbsp;
     </Typography>
   );
 }

@@ -21,7 +21,6 @@ export default function WelcomePage() {
     <div>
       <CssBaseline />
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode}/>
-      {/* <Hero /> */}
       <Box sx={{ bgcolor: 'background.default' }}>
         <Main />
         <Features />

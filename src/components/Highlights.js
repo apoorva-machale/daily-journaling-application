@@ -61,7 +61,7 @@ export default function Highlights() {
         pt: { xs: 4, sm: 12 },
         pb: { xs: 8, sm: 16 },
         color: 'black',
-        backgroundColor: '#01579b',
+        backgroundColor: '#0288d1',
       }}
     >
       <Container

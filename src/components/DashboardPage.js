@@ -8,30 +8,52 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { PieChart } from '@mui/x-charts/PieChart';
+import { Typography } from '@mui/material';
 
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 const DashboardPage = (props) => {
   const [sentiment, setSentiment] = useState({});
+  const [piedata, setPiedata] = useState([])
+  const [loading, setLoading] = useState([]);
+
+  const create_piedata = (data) => {
+    let analysisData = [];
+    let id = 0; // Use a separate counter for id
+
+    // Loop through data to collect unique analyses
+    for (const item of data) {
+      const analysis = item.analysis;
+      const existingAnalysis = analysisData.find(a => a.label === analysis);
+
+      if (!existingAnalysis) {
+        analysisData.push({ id: id++, label: analysis, value: 0 });
+      }
+    }
+
+    // Loop through data again to count occurrences
+    for (const item of data) {
+      const analysis = item.analysis;
+      for (let i = 0; i < analysisData.length; i++) {
+        if (analysisData[i].label === analysis) {
+          analysisData[i].value++;
+          break; // Exit inner loop after finding the matching analysis
+        }
+      }
+    }
+    return analysisData
+  };
 
   useEffect(() => {
-
+    setLoading(true);
+    let data = []
     axios({
       method: "get",
       url: "http://localhost:8000/blog/output",
       params: {
         date:"2024-04-14",
-        email: "string4"
+        email: "string"
       },
       headers: {
         // Authorization: `Token ${accessToken}`,
@@ -39,45 +61,62 @@ const DashboardPage = (props) => {
     })
       .then((sentiment) => {
         console.log("sentiment", sentiment.data);
-        //const email = skill.data.email;
         setSentiment(sentiment.data);
+        data = create_piedata(sentiment.data)
+        setPiedata(data)
+        setLoading(false);
       })
       .catch((error) => {
         console.log("error", error);
+        setLoading(false);
       });
   }, []);
 
-
+  
   return (
+    <div>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Blog Title</TableCell>
+            <TableCell align="right">Body</TableCell>
+            <TableCell align="right">Sentiment Score</TableCell>
+            <TableCell align="right">Sentiment Magnitude</TableCell>
           </TableRow>
         </TableHead>
+        {loading && (
+          <Typography variant="body2">Loading...</Typography>
+        )}
+        {!loading && (
         <TableBody>
-          {rows.map((row) => (
+          {sentiment && sentiment.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.title}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.title}
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              <TableCell align="right">{row.body}</TableCell>
+              <TableCell align="right">{row.sentiment_magnitude}</TableCell>
+              <TableCell align="right">{row.sentiment_score}</TableCell>
             </TableRow>
           ))}
         </TableBody>
+        )}
       </Table>
     </TableContainer>
+    <PieChart
+      series={[
+        {
+          data: piedata
+        },
+      ]}
+      width={600}
+      height={200}
+    />
+    </div>
   );
 }
 

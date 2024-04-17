@@ -10,6 +10,11 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Typography } from '@mui/material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from '@mui/material/Button';
 
 
 
@@ -75,6 +80,13 @@ const DashboardPage = (props) => {
   
   return (
     <div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['DatePicker']}>
+        <DatePicker label="Basic date picker" />
+      </DemoContainer>
+    </LocalizationProvider>
+    <Button variant="contained">Blog Analysis</Button>
+    <Typography variant="h3">Your blog content</Typography>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -107,6 +119,7 @@ const DashboardPage = (props) => {
         )}
       </Table>
     </TableContainer>
+    <Typography variant="h3">Overall Analysis</Typography>
     <PieChart
       series={[
         {

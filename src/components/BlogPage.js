@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,12 +14,18 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Paper } from '@mui/material';
 import axios  from 'axios';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
-export default function BlogPage() {
+const BlogPage = (props) => {
+    const [loading, setLoading] = useState(false)
+    const [blogs, setBlogs] = useState([])
     const [blog, setBlog] = useState({
         email: "",
         body: "",
@@ -39,7 +45,7 @@ export default function BlogPage() {
     //   const obj = JSON.parse(sessionStorage.getItem("login"));
     //   const accessToken = obj.token;
     //   console.log(accessToken);
-    console.log("blog",blog)
+    // console.log("blog",blog)
     axios({
         method: "post",
         url: "http://localhost:8000/blog/",
@@ -68,6 +74,40 @@ export default function BlogPage() {
           }
         });
     };
+
+    useEffect(() => {
+        // const obj = JSON.parse(sessionStorage.getItem("login"));
+        // const accessToken = obj ? obj.token : null;
+        // console.log(accessToken);
+        setLoading(true);
+    
+        axios({
+          method: "get",
+          url: "http://localhost:8000/blog/",
+          headers: {
+            // Authorization: `Token ${accessToken}`,
+          },
+          params: {
+            email: "string"
+          },
+        })
+          .then((blogs) => {
+            console.log("blogs", blogs.data);
+            setBlogs(blogs.data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log("error", error);
+            setLoading(false);
+            // if (
+            //   error.response.data.detail === "Token has expired" ||
+            //   error.response.data.detail === "Invalid token"
+            // ) {
+            //   history.push("/");
+            //   toast.error("Session expired");
+            // }
+          });
+      }, []);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -149,9 +189,34 @@ export default function BlogPage() {
       <Typography component="h2" variant="h5">
             Your Blogs
        </Typography>
+       {loading && (
+          <Typography variant="body2">Loading...</Typography>
+        )}
+        {!loading && (
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            {blogs && blogs.map((row) => (
+            <ListItem alignItems="flex-start">
+                <ListItemText
+                primary={
+                    <React.Fragment>
+                    {row.title}
+                    </React.Fragment>
+                }
+                secondary={
+                    <React.Fragment>
+                    {row.body}
+                    </React.Fragment>
+                }
+                />
+            </ListItem>
+            ))}
+        </List>
+        )}
       </Container>
       </Grid>
       </Paper>
     </ThemeProvider>
   );
 }
+
+export default BlogPage;

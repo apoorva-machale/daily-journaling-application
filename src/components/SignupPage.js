@@ -21,6 +21,14 @@ const defaultTheme = createTheme();
 export default function SignupPage() {
   const [user, setUser] = useState([]);
 
+  function handleChange({ target }) {
+    // console.log("check target", target.value);
+    setUser({
+      ...user,
+      [target.name]: target.value,
+    });
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -29,6 +37,7 @@ export default function SignupPage() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    
 
     axios({
       method: "post",
@@ -36,12 +45,11 @@ export default function SignupPage() {
       headers: {
       //   Authorization: `Token ${accessToken}`,
       },
-      params: {
-        data: data
-      },
+      data: user
     })
       .then((user) => {
       setUser(user.data);
+      console.log("success", user.data)
     })
       .catch((error) => {
         console.log("error while signing up", error);
@@ -76,6 +84,7 @@ export default function SignupPage() {
                   label="Your Name"
                   name="name"
                   autoComplete="family-name"
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -86,6 +95,7 @@ export default function SignupPage() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -97,6 +107,7 @@ export default function SignupPage() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>

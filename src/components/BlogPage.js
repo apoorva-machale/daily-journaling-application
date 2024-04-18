@@ -18,6 +18,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
+import DetailedBlogComponent from './DetailedBlogComponent';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -26,7 +27,9 @@ const defaultTheme = createTheme();
 const BlogPage = (props) => {
     const [loading, setLoading] = useState(false)
     const [blogs, setBlogs] = useState([])
+    const [selectedBlog, setSelectedBlog] = useState([]);
     const [blog, setBlog] = useState({
+        id: "",
         email: "",
         body: "",
         title: ""
@@ -40,6 +43,11 @@ const BlogPage = (props) => {
           [target.name]: target.value,
         });
       }
+
+    const handleTitleClick = (clickedBlog) => {
+      setSelectedBlog(clickedBlog);
+    };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     //   const obj = JSON.parse(sessionStorage.getItem("login"));
@@ -58,6 +66,7 @@ const BlogPage = (props) => {
         //   toast.success("Your skills are updated");
         setBlog({
             ...blog,
+            id: blog.id,
             body: blog.body,
             title: blog.title,
             email: blog.email,
@@ -108,7 +117,7 @@ const BlogPage = (props) => {
             // }
           });
       }, []);
-
+    
   return (
     <ThemeProvider theme={defaultTheme}>
     <Paper>
@@ -177,7 +186,7 @@ const BlogPage = (props) => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Analyze Blog
+              Store Blog
             </Button>
           </Box>
         </Box> 
@@ -193,9 +202,9 @@ const BlogPage = (props) => {
           <Typography variant="body2">Loading...</Typography>
         )}
         {!loading && (
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
             {blogs && blogs.map((row) => (
-            <ListItem alignItems="flex-start">
+            <ListItem alignItems="flex-start" onClick={() => handleTitleClick(row)}>
                 <ListItemText
                 primary={
                     <React.Fragment>
@@ -210,6 +219,7 @@ const BlogPage = (props) => {
                 />
             </ListItem>
             ))}
+            {selectedBlog && <DetailedBlogComponent blog={selectedBlog} />}
         </List>
         )}
       </Container>

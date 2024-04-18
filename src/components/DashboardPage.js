@@ -15,13 +15,56 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
-
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 
 
 const DashboardPage = (props) => {
-  const [sentiment, setSentiment] = useState({});
+  const [sentiment, setSentiment] = useState([]);
   const [piedata, setPiedata] = useState([])
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+
+  const handleChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("DATE",selectedDate)
+    // setDate(date)
+    setLoading(true)
+    axios({
+        method: "get",
+        url: "http://localhost:8000/blog/output/",
+        headers: {
+        //   Authorization: `Token ${accessToken}`,
+        },
+        params: {
+          date: selectedDate,
+          email: "string"
+        },
+      })
+        .then((sentiment) => {
+        setSentiment(sentiment.data);
+        let data = create_piedata(sentiment.data)
+        setPiedata(data)
+        setLoading(false)
+        //   toast.success("Your skills are updated");
+      })
+        .catch((error) => {
+          console.log("error2", error);
+          setLoading(false);
+          if (
+            error.response.data.detail === "Token has expired" ||
+            error.response.data.detail === "Invalid token"
+          ) {
+            // history.push("/");
+            // toast.error("Session expired");
+          }
+        });
+    };
+
 
   const create_piedata = (data) => {
     let analysisData = [];
@@ -50,42 +93,45 @@ const DashboardPage = (props) => {
     return analysisData
   };
 
-  useEffect(() => {
-    setLoading(true);
-    let data = []
-    axios({
-      method: "get",
-      url: "http://localhost:8000/blog/output",
-      params: {
-        date:"2024-04-14",
-        email: "string"
-      },
-      headers: {
-        // Authorization: `Token ${accessToken}`,
-      },
-    })
-      .then((sentiment) => {
-        console.log("sentiment", sentiment.data);
-        setSentiment(sentiment.data);
-        data = create_piedata(sentiment.data)
-        setPiedata(data)
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log("error", error);
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   axios({
+  //     method: "get",
+  //     url: "http://localhost:8000/blog/output",
+  //     params: {
+  //       date:date,
+  //       email: "string"
+  //     },
+  //     headers: {
+  //       // Authorization: `Token ${accessToken}`,
+  //     },
+  //   })
+  //     .then((sentiment) => {
+  //       console.log("sentiment", sentiment.data);
+  //       setSentiment(sentiment.data);
+  //       data = create_piedata(sentiment.data)
+  //       setPiedata(data)
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log("error1", error);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   
   return (
     <div>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker']}>
-        <DatePicker label="Basic date picker" />
-      </DemoContainer>
-    </LocalizationProvider>
-    <Button variant="contained">Blog Analysis</Button>
+    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}> 
+    <TextField
+          id="date"
+          name="date"
+          label="YYYY-MM-DD"
+          variant="outlined"
+          value={selectedDate}
+          onChange={handleChange}
+        />
+    <Button variant="contained" type="submit">Blog Analysis</Button>
     <Typography variant="h3">Your blog content</Typography>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -102,9 +148,9 @@ const DashboardPage = (props) => {
         )}
         {!loading && (
         <TableBody>
-          {sentiment && sentiment.map((row) => (
+          { sentiment && sentiment.map((row) => (
             <TableRow
-              key={row.title}
+              key={row}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
@@ -129,6 +175,7 @@ const DashboardPage = (props) => {
       width={600}
       height={200}
     />
+    </Box>
     </div>
   );
 }

@@ -189,6 +189,14 @@ const BlogPage = (props) => {
             >
               Store Blog
             </Button>
+            <Button
+              // type="submit"
+              fullWidth
+              href='/dashboard'
+              variant="contained"
+            >
+              Go to Dashboard
+            </Button>
           </Box>
         </Box> 
        

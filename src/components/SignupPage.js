@@ -14,15 +14,17 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
 import { Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 
-export default function SignupPage() {
+export default function SignupPage(props) {
   const [user, setUser] = useState([]);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
   var errordisplay;
   function isError(_errors){
     
@@ -99,10 +101,12 @@ export default function SignupPage() {
       .then((user) => {
       setUser(user.data);
       console.log("success", user.data)
+      navigate("/blogs"); 
     })
       .catch((error) => {
         console.log("error while signing up", error);
       });
+
   };
 
   return (

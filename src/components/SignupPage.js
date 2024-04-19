@@ -13,13 +13,57 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
+import { Alert } from '@mui/material';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
+
 export default function SignupPage() {
   const [user, setUser] = useState([]);
+  const [errors, setErrors] = useState({});
+  var errordisplay;
+  function isError(_errors){
+    
+  if (_errors.email) {
+    errordisplay = (
+      <div>
+        <Alert severity="error">Incorrect EmailId</Alert>
+      </div>
+    );
+  }
+  if (_errors.password) {
+    errordisplay = (
+      <div>
+        <Alert severity="error">Incorrect Password</Alert>
+      </div>
+    );
+  }
+  }
+  function formIsValid() {
+    const _errors = {};
+    const re = /^[a-zA-Z0-9_.-]+@gmail.com$/;
+    const etest = re.test(user.email);
+    console.log("email flag", etest);
+    const res = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$.!%*#?&])[A-Za-z\d@$!%*#?&]{5,}$/;
+    // String@7
+    const reset = res.test(user.password);
+    
+    if (!etest) {
+      _errors.email = "Incorrect Email ";
+      console.log("incorect email");
+      console.log("email flag", etest);
+    }
+    if (!reset) {
+      _errors.password = "Incorrect Password";
+      console.log("incorect password");
+    }
+  
+    setErrors(_errors);
+    //form is valid if the errors object has no properties
+    return Object.keys(_errors).length === 0;
+  }
 
   function handleChange({ target }) {
     // console.log("check target", target.value);
@@ -31,6 +75,11 @@ export default function SignupPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (!formIsValid()) {
+      console.log("invalid");
+      return;
+    }
     const data = new FormData(event.currentTarget);
     console.log({
       name: data.get('name'),
@@ -96,6 +145,8 @@ export default function SignupPage() {
                   name="email"
                   autoComplete="email"
                   onChange={handleChange}
+                  helperText= "Please use gmail address"
+                  {...()=>isError(errors)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -108,6 +159,8 @@ export default function SignupPage() {
                   id="password"
                   autoComplete="new-password"
                   onChange={handleChange}
+                  helperText="Password should contain digit,capital character,special character and should be more than 5characters"
+                  {...()=>isError(errors)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -125,6 +178,9 @@ export default function SignupPage() {
             >
               Sign Up
             </Button>
+            <Box color="primary" mx="auto" pt={2}>
+              {errordisplay}
+            </Box>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/signin" variant="body2">

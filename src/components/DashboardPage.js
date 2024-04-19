@@ -126,7 +126,7 @@ const DashboardPage = (props) => {
       url: "http://localhost:8000/blog/output",
       params: {
         date:selectedDate,
-        email: "string"
+        email: "string6"
       },
       headers: {
         // Authorization: `Token ${accessToken}`,

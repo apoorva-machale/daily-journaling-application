@@ -97,7 +97,7 @@ const BlogPage = (props) => {
             // Authorization: `Token ${accessToken}`,
           },
           params: {
-            email: "string"
+            email: "string6"
           },
         })
           .then((blogs) => {

@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { PieChart } from '@mui/x-charts/PieChart';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { Typography } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -17,6 +18,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import { Delete } from '@mui/icons-material';
 
 
 const DashboardPage = (props) => {
@@ -24,6 +26,28 @@ const DashboardPage = (props) => {
   const [piedata, setPiedata] = useState([])
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
+  const [isBlogDeleted, setIsBlogDeleted] = useState(false);
+
+  const DeleteBlog = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/blog/${id}`);
+      console.log("Blog deleted successfully:", response.data);
+      setIsBlogDeleted(true)
+      // Update state or UI to reflect the deletion (optional)
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+  
+      // Handle errors appropriately (e.g., display an error message)
+      if (error.response && error.response.status === 404) {
+        console.error("Blog not found: The blog entry with the given ID might not exist.");
+      } else if (error.response && error.response.status === 401) {
+        console.error("Unauthorized: You might need a valid access token to delete blogs.");
+      } else if (error.response && error.response.status === 403) {
+        console.error("Forbidden: You might not have permission to delete blogs.");
+      }
+      // Handle other potential errors as needed
+    }
+  };
 
   const handleChange = (event) => {
     setSelectedDate(event.target.value);
@@ -48,6 +72,7 @@ const DashboardPage = (props) => {
         .then((sentiment) => {
         setSentiment(sentiment.data);
         let data = create_piedata(sentiment.data)
+        console.log(sentiment.data)
         setPiedata(data)
         setLoading(false)
         //   toast.success("Your skills are updated");
@@ -93,31 +118,32 @@ const DashboardPage = (props) => {
     return analysisData
   };
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   axios({
-  //     method: "get",
-  //     url: "http://localhost:8000/blog/output",
-  //     params: {
-  //       date:date,
-  //       email: "string"
-  //     },
-  //     headers: {
-  //       // Authorization: `Token ${accessToken}`,
-  //     },
-  //   })
-  //     .then((sentiment) => {
-  //       console.log("sentiment", sentiment.data);
-  //       setSentiment(sentiment.data);
-  //       data = create_piedata(sentiment.data)
-  //       setPiedata(data)
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log("error1", error);
-  //       setLoading(false);
-  //     });
-  // }, []);
+  useEffect(() => {
+    let data;
+    setLoading(true);
+    axios({
+      method: "get",
+      url: "http://localhost:8000/blog/output",
+      params: {
+        date:selectedDate,
+        email: "string"
+      },
+      headers: {
+        // Authorization: `Token ${accessToken}`,
+      },
+    })
+      .then((temp) => {
+        console.log("sentiment", temp.data);
+        setSentiment(temp.data);
+        data = create_piedata(temp.data)
+        setPiedata(data)
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log("error1", error);
+        setLoading(false);
+      });
+  }, [selectedDate,isBlogDeleted]);
 
   
   return (
@@ -138,9 +164,10 @@ const DashboardPage = (props) => {
         <TableHead>
           <TableRow>
             <TableCell>Blog Title</TableCell>
-            <TableCell align="right">Body</TableCell>
-            <TableCell align="right">Sentiment Score</TableCell>
-            <TableCell align="right">Sentiment Magnitude</TableCell>
+            <TableCell>Body</TableCell>
+            <TableCell>Sentiment Score</TableCell>
+            <TableCell>Sentiment Magnitude</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         {loading && (
@@ -156,9 +183,10 @@ const DashboardPage = (props) => {
               <TableCell component="th" scope="row">
                 {row.title}
               </TableCell>
-              <TableCell align="right">{row.body}</TableCell>
-              <TableCell align="right">{row.sentiment_magnitude}</TableCell>
-              <TableCell align="right">{row.sentiment_score}</TableCell>
+              <TableCell>{row.body}</TableCell>
+              <TableCell>{(row.sentiment_magnitude).toFixed(2)}</TableCell>
+              <TableCell>{(row.sentiment_score).toFixed(2)}</TableCell>
+              <TableCell><DeleteRoundedIcon onClick={() => DeleteBlog(row.id)}/></TableCell>
             </TableRow>
           ))}
         </TableBody>

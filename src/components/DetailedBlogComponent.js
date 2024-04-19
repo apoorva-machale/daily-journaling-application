@@ -23,7 +23,7 @@ const DetailedBlogComponent = (props) => {
         // const accessToken = obj ? obj.token : null;
         // console.log(accessToken);
         setLoading(true);
-
+        console.log("in detailed blog componenet")
         axios({
         method: "get",
         url: "http://localhost:8000/blog/classify_blog_id",

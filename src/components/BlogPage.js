@@ -45,6 +45,7 @@ const BlogPage = (props) => {
       }
 
     const handleTitleClick = (clickedBlog) => {
+      console.log("Hi",clickedBlog)
       setSelectedBlog(clickedBlog);
     };
 
@@ -97,7 +98,7 @@ const BlogPage = (props) => {
             // Authorization: `Token ${accessToken}`,
           },
           params: {
-            email: "string6"
+            email: "string"
           },
         })
           .then((blogs) => {
@@ -204,8 +205,8 @@ const BlogPage = (props) => {
         {!loading && (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
             {blogs && blogs.map((row) => (
-            <ListItem alignItems="flex-start" onClick={() => handleTitleClick(row)}>
-                <ListItemText
+            <ListItem alignItems="flex-start" >
+                <ListItemText key={row.title} onClick={() => handleTitleClick(row)}
                 primary={
                     <React.Fragment>
                     {row.title}
@@ -216,12 +217,17 @@ const BlogPage = (props) => {
                     {row.body}
                     </React.Fragment>
                 }
-                />
+                >
+                {/* {selectedBlog && <DetailedBlogComponent blog={selectedBlog} />} */}
+                </ListItemText>
+                
             </ListItem>
             ))}
-            {selectedBlog && <DetailedBlogComponent blog={selectedBlog} />}
+            
         </List>
         )}
+        <Typography>Details for {selectedBlog.title}</Typography>
+         {selectedBlog && <DetailedBlogComponent blog={selectedBlog} />}
       </Container>
       </Grid>
       </Paper>

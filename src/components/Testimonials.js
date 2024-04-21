@@ -11,41 +11,42 @@ import { useTheme } from '@mui/system';
 
 const userTestimonials = [
   {
-    avatar: <Avatar alt="ABC" src="/static/images/avatar/1.jpg" />,
-    name: 'ABC',
-    occupation: 'STUDENT',
+    avatar: <Avatar alt="S" src="/static/images/avatar/1.jpg" />,
+    name: 'Sarah M.',
+    occupation: 'Student',
     testimonial:
-      "I absolutely love how versatile this product is! Whether I'm tackling work projects or indulging in my favorite hobbies, it seamlessly adapts to my changing needs. Its intuitive design has truly enhanced my daily routine, making tasks more efficient and enjoyable.",
+      "This app has been a real eye-opener! I never realized how much my mood affects what I write about. Seeing the sentiment analysis really helps me understand my emotional patterns.",
   },
   {
-    avatar: <Avatar alt="xyz" src="/static/images/avatar/2.jpg" />,
-    name: 'xyz',
+    avatar: <Avatar alt="E" src="/static/images/avatar/2.jpg" />,
+    name: 'Emily C.',
     occupation: 'Lead Product Designer',
-    testimonial:'',
+    testimonial:'Journaling has always been helpful, but this app takes it to the next level. Being able to track my mood over time has helped me identify triggers for stress and anxiety.',
   },
   {
-    avatar: <Avatar alt="ko" src="/static/images/avatar/3.jpg" />,
-    name: 'Cinor',
+    avatar: <Avatar alt="O" src="/static/images/avatar/3.jpg" />,
+    name: 'Olivia J.',
     occupation: 'CTO',
-    testimonial: '',
+    testimonial: "As someone who reads a lot of news, it's fascinating to see how it impacts my mood. This app separates my news entries and helps me understand how negativity can creep in.",
   },
   {
-    avatar: <Avatar alt="Remy Sharp" src="/static/images/avatar/4.jpg" />,
+    avatar: <Avatar alt="J" src="/static/images/avatar/4.jpg" />,
     name: 'Julia Stewart',
     occupation: 'Senior Engineer',
-    testimonial: '',
+    testimonial: 'I never thought an app could be so therapeutic. Journaling in this app has helped me process difficult emotions and gain a deeper sense of self-awareness.',
   },
   {
-    avatar: <Avatar alt="T" src="/static/images/avatar/5.jpg" />,
+    avatar: <Avatar alt="J" src="/static/images/avatar/5.jpg" />,
     name: 'John Smith',
     occupation: 'Product Designer',
-    testimonial: "",
+    testimonial: "This app has been a game-changer for my mental health. By understanding my moods and journaling triggers, I've been able to manage my anxiety and cultivate a more positive outlook.",
   },
   {
-    avatar: <Avatar alt="" src="/static/images/avatar/6.jpg" />,
+    avatar: <Avatar alt="D" src="/static/images/avatar/6.jpg" />,
     name: 'Daniel Wolf',
-    occupation: 'CDO',
-    testimonial:"",  },
+    occupation: 'Entrepreneur',
+    testimonial:"Before this app, journaling felt like a chore. Now, with the topic categorization and mood tracking, it's actually fun to see the trends and connections in my life.",  
+  },
 ];
 
 const darkLogos = [
@@ -123,11 +124,6 @@ export default function Testimonials() {
                   avatar={testimonial.avatar}
                   title={testimonial.name}
                   subheader={testimonial.occupation}
-                />
-                <img
-                  src={logos[index]}
-                  alt={`Logo ${index + 1}`}
-                  style={logoStyle}
                 />
               </Box>
             </Card>

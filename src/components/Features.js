@@ -16,24 +16,24 @@ import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 const items = [
   {
     icon: <ViewQuiltRoundedIcon />,
-    title: 'Dashboard',
+    title: 'Journal Entry Creation',
     description:
-      'xyz',
+    'Users can write and save blog entries with titles, tags, and optional privacy settings.',
     imageLight: 'url("/static/images/cover_picture.png")',
     imageDark: 'url("/static/images/cover_picture.png")',
   },
   {
     icon: <EdgesensorHighRoundedIcon />,
-    title: '',
+    title: 'Sentiment Insights',
     description:
-      '',
+      'Visualize sentiment score and magnitude over time using charts and graphs.',
     imageLight: 'url("/static/images/cover_picture.png")',
     imageDark: 'url("/static/images/cover_picture.png")',
   },
   {
     icon: <DevicesRoundedIcon />,
-    title: '',
-    description:'',
+    title: 'Mood Trends',
+    description:'Identify patterns in user moods and track changes over days, weeks, or months.',
     imageLight: 'url("/static/images/cover_picture.png")',
     imageDark: 'url("/static/images/cover_picture.png")',
   },

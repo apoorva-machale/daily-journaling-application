@@ -69,7 +69,6 @@ const DashboardPage = (props) => {
         },
         params: {
           date: selectedDate,
-          email: "string"
         },
       })
         .then((sentiment) => {

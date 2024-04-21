@@ -14,6 +14,10 @@ const DetailedBlogComponent = (props) => {
         blog
     } = props
 
+    const obj = JSON.parse(sessionStorage.getItem("login"));
+    const accessToken = obj.token;
+    // console.log(accessToken);  
+
     const [classification, setClassification] = useState([]);
     const [loading, setLoading] = useState(false);
     const [load, setLoad] = useState(true);
@@ -28,7 +32,7 @@ const DetailedBlogComponent = (props) => {
         method: "get",
         url: "http://localhost:8000/blog/classify_blog_id",
         headers: {
-            // Authorization: `Token ${accessToken}`,
+          Token: accessToken,
         },
         params:{
             blog_id:blog.id

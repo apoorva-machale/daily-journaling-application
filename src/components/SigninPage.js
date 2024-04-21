@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -12,18 +13,52 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+
 
 
 const defaultTheme = createTheme();
 
-export default function SignInPage() {
+export default function SignInPage(props) {
+  const navigate = useNavigate();
+  const [currentuser, setCurrentuser] = useState([])
+
+  function handleChange({ target }) {
+    // console.log("check target", target.value);
+    setCurrentuser({
+      ...currentuser,
+      [target.name]: target.value,
+    });
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    // const data = new FormData(event.currentTarget);
+    console.log("hello",currentuser)
+   
+    axios({
+      method: "post",
+      url: "http://localhost:8000/user/login",
+      headers: {
+      //   Authorization: `Token ${accessToken}`,
+      },
+      data: currentuser
+    })
+      .then((user) => {
+      console.log("success", user.data)
+      sessionStorage.setItem(
+        "login",
+        JSON.stringify({
+          login: true,
+          token: user.data.access_token,
+        })
+      );
+
+      navigate("/blogs"); 
+    })
+      .catch((error) => {
+        console.log("error while signing up", error);
+      });
   };
 
   return (
@@ -65,10 +100,10 @@ export default function SignInPage() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="username"
                 label="Email Address"
-                name="email"
-                autoComplete="email"
+                name="username"
+                onChange={handleChange}
                 autoFocus
               />
               <TextField
@@ -79,7 +114,7 @@ export default function SignInPage() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                onChange={handleChange}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}

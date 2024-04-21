@@ -30,10 +30,13 @@ const BlogPage = (props) => {
     const [selectedBlog, setSelectedBlog] = useState([]);
     const [blog, setBlog] = useState({
         id: "",
-        email: "",
         body: "",
         title: ""
       });
+
+    const obj = JSON.parse(sessionStorage.getItem("login"));
+    const accessToken = obj.token;
+    // console.log(accessToken);  
 
     function handleChange({ target }) {
         // console.log("check target", target.value);
@@ -51,15 +54,13 @@ const BlogPage = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //   const obj = JSON.parse(sessionStorage.getItem("login"));
-    //   const accessToken = obj.token;
-    //   console.log(accessToken);
+      
     // console.log("blog",blog)
     axios({
         method: "post",
         url: "http://localhost:8000/blog/",
         headers: {
-        //   Authorization: `Token ${accessToken}`,
+          Token: accessToken,
         },
         data: blog,
       })
@@ -70,8 +71,8 @@ const BlogPage = (props) => {
             id: blog.id,
             body: blog.body,
             title: blog.title,
-            email: blog.email,
           });
+          console.log("blog saved")
         })
         .catch((error) => {
           console.log("error", error);
@@ -86,8 +87,8 @@ const BlogPage = (props) => {
     };
 
     useEffect(() => {
-        // const obj = JSON.parse(sessionStorage.getItem("login"));
-        // const accessToken = obj ? obj.token : null;
+        const obj = JSON.parse(sessionStorage.getItem("login"));
+        const accessToken = obj ? obj.token : null;
         // console.log(accessToken);
         setLoading(true);
     
@@ -95,10 +96,7 @@ const BlogPage = (props) => {
           method: "get",
           url: "http://localhost:8000/blog/",
           headers: {
-            // Authorization: `Token ${accessToken}`,
-          },
-          params: {
-            email: "string"
+            Token: accessToken,
           },
         })
           .then((blogs) => {
@@ -163,18 +161,6 @@ const BlogPage = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange={handleChange}
-                  value={blog.email}
-                />
-              </Grid>
-              <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
                   label="I want to receive inspiration, suggestions and updates via email."
@@ -226,7 +212,6 @@ const BlogPage = (props) => {
                     </React.Fragment>
                 }
                 >
-                {/* {selectedBlog && <DetailedBlogComponent blog={selectedBlog} />} */}
                 </ListItemText>
                 
             </ListItem>

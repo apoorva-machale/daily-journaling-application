@@ -28,6 +28,9 @@ const DashboardPage = (props) => {
   const [selectedDate, setSelectedDate] = useState("");
   const [isBlogDeleted, setIsBlogDeleted] = useState(false);
 
+  const obj = JSON.parse(sessionStorage.getItem("login"));
+  const accessToken = obj.token;
+
   const DeleteBlog = async (id) => {
     try {
       const response = await axios.delete(`http://localhost:8000/blog/${id}`);
@@ -62,7 +65,7 @@ const DashboardPage = (props) => {
         method: "get",
         url: "http://localhost:8000/blog/output/",
         headers: {
-        //   Authorization: `Token ${accessToken}`,
+          Token: accessToken,
         },
         params: {
           date: selectedDate,
@@ -126,10 +129,9 @@ const DashboardPage = (props) => {
       url: "http://localhost:8000/blog/output",
       params: {
         date:selectedDate,
-        email: "string6"
       },
       headers: {
-        // Authorization: `Token ${accessToken}`,
+        Authorization: `Token ${accessToken}`,
       },
     })
       .then((temp) => {
@@ -157,7 +159,8 @@ const DashboardPage = (props) => {
           value={selectedDate}
           onChange={handleChange}
         />
-    <Button variant="contained" type="submit">Blog Analysis</Button>
+        <Box><Button variant="contained" sx={{ mt: 3, mb: 2 }} type="submit">Blog Analysis</Button></Box>
+    <Button href="/blogs" variant="contained"> Go back to Journaling</Button>
     <Typography variant="h3">Your blog content</Typography>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

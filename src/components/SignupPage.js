@@ -15,8 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
 import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { toast} from 'react-hot-toast';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -104,10 +103,11 @@ export default function SignupPage(props) {
       .then((user) => {
       setUser(user.data);
       console.log("success", user.data)
-
-      navigate("/blogs"); 
+      toast.success("Your account has been created")  
+      navigate("/signin"); 
     })
       .catch((error) => {
+        toast.error("Oops, please try again!")  
         console.log("error while signing up", error);
       });
 

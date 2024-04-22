@@ -14,7 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-
+import { toast} from 'react-hot-toast';
 
 
 const defaultTheme = createTheme();
@@ -53,7 +53,7 @@ export default function SignInPage(props) {
           token: user.data.access_token,
         })
       );
-
+      toast.success("You are successfully logged in")
       navigate("/blogs"); 
     })
       .catch((error) => {

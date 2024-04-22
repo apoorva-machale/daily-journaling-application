@@ -5,13 +5,13 @@ import SignInPage from "./components/SigninPage";
 import SignupPage from "./components/SignupPage";
 import DashboardPage from "./components/DashboardPage";
 import BlogPage from "./components/BlogPage";
-
+import { Toaster} from 'react-hot-toast';
 
 const App = () => {
 
   return (
     <div>
-
+      <Toaster/>
       <Routes>
         <Route path="/" exact element={<WelcomePage />} />
         <Route path="/signin" element={<SignInPage />} />

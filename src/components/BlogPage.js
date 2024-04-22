@@ -19,6 +19,8 @@ import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import DetailedBlogComponent from './DetailedBlogComponent';
+import { toast} from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -36,7 +38,7 @@ const BlogPage = (props) => {
 
     const obj = JSON.parse(sessionStorage.getItem("login"));
     const accessToken = obj.token;
-    // console.log(accessToken);  
+    const navigate = useNavigate();
 
     function handleChange({ target }) {
         // console.log("check target", target.value);
@@ -65,23 +67,28 @@ const BlogPage = (props) => {
         data: blog,
       })
         .then((res) => {
-        //   toast.success("Your skills are updated");
-        setBlog({
+        if(res.data == "Insufficient word count to classify the blog"){
+          toast.error("Insufficient word count to classify the blog")
+        }else{
+          setBlog({
             ...blog,
             id: blog.id,
             body: blog.body,
             title: blog.title,
           });
           console.log("blog saved")
+          toast.success("Your blog has been saved")
+        }
         })
         .catch((error) => {
           console.log("error", error);
+          toast.error("Please try again!")
           if (
-            error.response.data.detail === "Token has expired" ||
-            error.response.data.detail === "Invalid token"
+            error.response.data.detail === "Token expired: Signature has expired." ||
+            error.response.data.detail ==="Invalid token"
           ) {
-            // history.push("/");
-            // toast.error("Session expired");
+            navigate("/signin"); 
+            toast.error("Session expired");
           }
         });
     };
@@ -107,13 +114,13 @@ const BlogPage = (props) => {
           .catch((error) => {
             console.log("error", error);
             setLoading(false);
-            // if (
-            //   error.response.data.detail === "Token has expired" ||
-            //   error.response.data.detail === "Invalid token"
-            // ) {
-            //   history.push("/");
-            //   toast.error("Session expired");
-            // }
+            if (
+              error.response.data.detail === "Token expired: Signature has expired." ||
+              error.response.data.detail === "Invalid token"
+            ) {
+              navigate("/signin"); 
+              toast.error("Session expired");
+            }
           });
       }, []);
     
@@ -157,6 +164,7 @@ const BlogPage = (props) => {
                   label="Blog Content"
                   name="body"
                   onChange={handleChange}
+                  helperText="Your blog content should be minimum of 25 words"
                   value={blog.body}
                 />
               </Grid>
@@ -196,9 +204,14 @@ const BlogPage = (props) => {
        {loading && (
           <Typography variant="body2">Loading...</Typography>
         )}
+        { blogs.length === 0 && (
+                <Typography variant="body2">
+                  You don't have any blogs yet. Start journaling here!
+                </Typography>
+              )}
         {!loading && (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            {blogs && blogs.map((row) => (
+            {blogs.length >0 && blogs.map((row) => (
             <ListItem alignItems="flex-start" >
                 <ListItemText key={row.title} onClick={() => handleTitleClick(row)}
                 primary={

@@ -21,6 +21,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DetailedBlogComponent from './DetailedBlogComponent';
 import { toast} from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import SuggestionBlog from './SuggestionBlog';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -210,9 +211,9 @@ const BlogPage = (props) => {
                 </Typography>
               )}
         {!loading && (
-        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        <List sx={{ width: '90%', bgcolor: 'background.paper' }}>
             {blogs.length >0 && blogs.map((row) => (
-            <ListItem alignItems="flex-start" >
+            <ListItem  >
                 <ListItemText key={row.title} onClick={() => handleTitleClick(row)}
                 primary={
                     <React.Fragment>
@@ -226,12 +227,14 @@ const BlogPage = (props) => {
                 }
                 >
                 </ListItemText>
-                
+                <ListItemText sx={{ width: '90%', color: "blue"}} onClick={() => handleTitleClick(row)}>Get Suggestions</ListItemText>
             </ListItem>
             ))}
             
         </List>
         )}
+         <Typography>Suggestions for {selectedBlog.title}</Typography>
+         {selectedBlog && <SuggestionBlog blog={selectedBlog} />}
         <Typography>Details for {selectedBlog.title}</Typography>
          {selectedBlog && <DetailedBlogComponent blog={selectedBlog} />}
       </Container>

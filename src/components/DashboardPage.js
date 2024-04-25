@@ -182,7 +182,7 @@ const DashboardPage = (props) => {
               key={row}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" >
                 {row.title}
               </TableCell>
               <TableCell>{row.body}</TableCell>

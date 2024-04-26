@@ -19,6 +19,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { Delete } from '@mui/icons-material';
+import NavBar from './NavBar';
 
 
 const DashboardPage = (props) => {
@@ -59,6 +60,7 @@ const DashboardPage = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("DATE",selectedDate)
+    setSelectedDate(selectedDate)
     // setDate(date)
     setLoading(true)
     axios({
@@ -144,11 +146,12 @@ const DashboardPage = (props) => {
         console.log("error1", error);
         setLoading(false);
       });
-  }, [selectedDate,isBlogDeleted]);
+  }, [selectedDate, isBlogDeleted]);
 
   
   return (
     <div>
+    <NavBar/>
     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}> 
     <TextField
           id="date"
@@ -160,7 +163,7 @@ const DashboardPage = (props) => {
         />
         <Box><Button variant="contained" sx={{ mt: 3, mb: 2 }} type="submit">Blog Analysis</Button></Box>
     <Button href="/blogs" variant="contained"> Go back to Journaling</Button>
-    <Typography variant="h3">Your blog content</Typography>
+    <Typography variant="h4">Your blog content</Typography>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -195,7 +198,7 @@ const DashboardPage = (props) => {
         )}
       </Table>
     </TableContainer>
-    <Typography variant="h3">Overall Analysis</Typography>
+    <Typography variant="h4">Overall Analysis</Typography>
     <PieChart
       series={[
         {

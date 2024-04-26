@@ -22,6 +22,7 @@ import DetailedBlogComponent from './DetailedBlogComponent';
 import { toast} from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import SuggestionBlog from './SuggestionBlog';
+import NavBar from './NavBar';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -127,6 +128,7 @@ const BlogPage = (props) => {
     
   return (
     <ThemeProvider theme={defaultTheme}>
+    <NavBar />
     <Paper>
     <Grid item xs={6} sm={6} spacing={2}>
       <Container component="main" maxWidth="xs">
@@ -161,6 +163,8 @@ const BlogPage = (props) => {
                 <TextField
                   required
                   fullWidth
+                  multiline
+                  rows={10}
                   id="BlogBody"
                   label="Blog Content"
                   name="body"
@@ -199,7 +203,7 @@ const BlogPage = (props) => {
       </Grid>
       <Grid item xs={6} sm={6} spacing={2}>
       <Container component="main" >
-      <Typography component="h2" variant="h5">
+      <Typography component="h2" variant="h4">
             Your Blogs
        </Typography>
        {loading && (
@@ -211,32 +215,34 @@ const BlogPage = (props) => {
                 </Typography>
               )}
         {!loading && (
-        <List sx={{ width: '90%', bgcolor: 'background.paper' }}>
+        <List sx={{  bgcolor: 'background.paper' }}>
             {blogs.length >0 && blogs.map((row) => (
-            <ListItem  >
-                <ListItemText key={row.title} onClick={() => handleTitleClick(row)}
+            <ListItem>
+                <ListItemText  key={row.title} onClick={() => handleTitleClick(row)}
                 primary={
                     <React.Fragment>
-                    {row.title}
+                      <Typography variant='overline' color="black" style={{ textDecoration: 'underline' }}>{row.title}</Typography>
                     </React.Fragment>
                 }
                 secondary={
                     <React.Fragment>
-                    {row.body}
+                    <Typography variant='body2' align="justify" color="grey">{row.body}</Typography>
                     </React.Fragment>
                 }
                 >
-                </ListItemText>
-                <ListItemText sx={{ width: '90%', color: "blue"}} onClick={() => handleTitleClick(row)}>Get Suggestions</ListItemText>
+                </ListItemText><Box>
+                <ListItemText sx={{ color: "blue"}} onClick={() => handleTitleClick(row)}>Get Suggestions</ListItemText></Box>
             </ListItem>
             ))}
             
         </List>
         )}
-         <Typography>Suggestions for {selectedBlog.title}</Typography>
-         {selectedBlog && <SuggestionBlog blog={selectedBlog} />}
-        <Typography>Details for {selectedBlog.title}</Typography>
-         {selectedBlog && <DetailedBlogComponent blog={selectedBlog} />}
+        <Box my={4} display="flex" alignItems="center" gap={4}  sx={{ border: '2px solid grey' }}>
+         <Typography variant='h4'>Suggestions for {selectedBlog.title}</Typography>
+         {selectedBlog && <SuggestionBlog blog={selectedBlog} />}</Box>
+         <Box>
+        <Typography  variant='h4'>Details for {selectedBlog.title}</Typography>
+         {selectedBlog && <DetailedBlogComponent blog={selectedBlog} />}</Box>
       </Container>
       </Grid>
       </Paper>

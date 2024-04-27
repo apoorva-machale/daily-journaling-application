@@ -41,7 +41,7 @@ const DashboardPage = (props) => {
       // Update state or UI to reflect the deletion (optional)
     } catch (error) {
       console.error("Error deleting blog:", error);
-  
+      setIsBlogDeleted(false)
       // Handle errors appropriately (e.g., display an error message)
       if (error.response && error.response.status === 404) {
         console.error("Blog not found: The blog entry with the given ID might not exist.");
@@ -145,10 +145,10 @@ const DashboardPage = (props) => {
       })
       .catch((error) => {
         console.log("error1", error);
-        toast("No data to display")
         setLoading(false);
+        toast("No data to display")
       });
-  }, [isBlogDeleted]);
+  }, [sentiment, isBlogDeleted]);
 
   
   return (

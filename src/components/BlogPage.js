@@ -72,6 +72,7 @@ const BlogPage = (props) => {
       })
         .then((res) => {
         if(res.data == "Insufficient word count to classify the blog"){
+          setLoading(false)
           toast.error("Insufficient word count to classify the blog")
         }else{
           setBlog({

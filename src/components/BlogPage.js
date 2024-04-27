@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
+import { CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -23,6 +24,7 @@ import { toast} from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import SuggestionBlog from './SuggestionBlog';
 import NavBar from './NavBar';
+import { CenterFocusWeak } from '@mui/icons-material';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -58,7 +60,7 @@ const BlogPage = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-      
+      setLoading(true)
     // console.log("blog",blog)
     axios({
         method: "post",
@@ -79,6 +81,7 @@ const BlogPage = (props) => {
             title: blog.title,
           });
           console.log("blog saved")
+          setLoading(false)
           toast.success("Your blog has been saved")
         }
         })
@@ -124,7 +127,7 @@ const BlogPage = (props) => {
               toast.error("Session expired");
             }
           });
-      }, []);
+      }, [blog]);
     
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -180,6 +183,9 @@ const BlogPage = (props) => {
                 />
               </Grid>
             </Grid>
+            <div>
+            {loading && <CircularProgress color="primary" />}
+          </div>
             <Button
               type="submit"
               fullWidth

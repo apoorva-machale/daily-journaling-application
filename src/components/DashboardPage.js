@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { Delete } from '@mui/icons-material';
 import NavBar from './NavBar';
+import toast from 'react-hot-toast';
 
 
 const DashboardPage = (props) => {
@@ -144,9 +145,10 @@ const DashboardPage = (props) => {
       })
       .catch((error) => {
         console.log("error1", error);
+        toast("No data to display")
         setLoading(false);
       });
-  }, [selectedDate, isBlogDeleted]);
+  }, [isBlogDeleted]);
 
   
   return (
